@@ -1,0 +1,233 @@
+### Login
+POST http://localhost:8000/v1/account/login/09128094946
+
+> {% client.global.set("token", response.body.token); %}
+
+### Validate
+POST http://localhost:8000/v1/account/validate
+Content-Type: application/json
+
+{
+  "loginKey":"{{token}}",
+  "code": 94946
+}
+
+> {% client.global.set("main_token", response.body.token); %}
+
+### Get Amount
+GET http://localhost:8000/v1/withdraw/withdrawableAmount
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+
+### Validate twoStep Password
+GET http://localhost:8000/account/validatePassword
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "password": "93423fdsfpioa!A"
+}
+
+### Get Basic Identity
+GET http://localhost:8000/account/identity
+Authorization: Bearer {{main_token}}
+
+### Set Basic Identity
+POST http://localhost:8000/account/identity
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "nationalCode": "0023891742",
+  "birthDate": "13791115"
+}
+
+
+### Requst Change Phone
+PATCH http://localhost:8000/account/changePhone
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "type": "swap",
+  "phone": "09128094946"
+}
+
+> {% client.global.set("changeKey", response.body.changeKey); %}
+
+### Verify Change Phone
+PATCH http://localhost:8000/account/changePhone
+Content-Type: application/json
+Authorization: Bearer fsdfkidsmfosdmfiomdsoifmidosmfdsmfomsj
+
+{
+  "type": "verify",
+  "changeKey": {{changeKey}},
+  "code": 15646
+}
+
+
+### Set TwoStep Password
+POST http://localhost:8000/twoStepPassword/enable
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "password": "0023891742dA!"
+}
+
+### Disable TwoStep Password
+POST http://localhost:8000/twoStepPassword/disable
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "password": "0023891742aA!f"
+}
+
+
+### Change TwoStep Password
+POST http://localhost:8000/twoStepPassword/change
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "password": "0023891742aA!",
+  "newPassword": "0023891742aA!!"
+}
+
+### Add Cart
+POST http://localhost:8000/carts
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "cartNumber": "6104337975198845"
+}
+
+### Carts List
+GET http://localhost:8000/carts
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### Remove Cart
+DELETE http://localhost:8000/carts/1
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+
+### Add Iban
+POST http://localhost:8000/ibans
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "ibanNumber": "490120020000004921619913"
+}
+
+### Ibans List
+GET http://localhost:8000/ibans
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### Remove Iban
+DELETE http://localhost:8000/ibans/1
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### Request Deposit
+POST http://localhost:8000/deposit/request
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "amount": 2000000,
+  "cartId": 5
+}
+
+### Deposit History
+GET http://localhost:8000/deposit/history
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### Request Trade
+POST http://localhost:8000/trade/request
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "side": "BUY",
+  "symbol": "BTC",
+  "amount": 400000,
+  "isAmountIrt": true
+}
+
+### Trade History
+GET http://localhost:8000/trade/history
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### Request Withdraw
+POST http://localhost:8000/withdraw/request
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "ibanId": 3,
+  "amount": 200000
+}
+
+### Withdraw History
+GET http://localhost:8000/withdraw/history
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### get Balance
+GET http://localhost:8000/account/balance
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### get Account Value
+GET http://localhost:8000/account/value
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### get Asset Details
+GET http://localhost:8000/prices/details/irt/xau
+Content-Type: application/json
+
+### get Asset Chart
+GET http://localhost:8000/prices/chart/crypto/btc/1
+Content-Type: application/json
+
+### get InviteKey
+GET http://localhost:8000/account/inviteKey
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+### Check Application Version
+GET http://localhost:8000/application/version/124
+Content-Type: application/json
+
+### Request Delete Account
+DELETE http://localhost:8000/account/disable
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "type": "swap"
+}
+
+> {% client.global.set("disableKey", response.body.disableKey); %}
+
+### Verify Disable Account
+DELETE http://localhost:8000/account/disable
+Content-Type: application/json
+Authorization: Bearer {{main_token}}
+
+{
+  "type": "verify",
+  "disableKey": "{{disableKey}}",
+  "code": "8307958928"
+}
